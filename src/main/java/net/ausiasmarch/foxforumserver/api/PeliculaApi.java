@@ -14,43 +14,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.ausiasmarch.foxforumserver.entity.ReplyEntity;
-import net.ausiasmarch.foxforumserver.service.ReplyService;
+import net.ausiasmarch.foxforumserver.entity.PeliculaEntity;
+
+import net.ausiasmarch.foxforumserver.service.PeliculaService;
+
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/reply")
-public class ReplyApi {
+@RequestMapping("/pelicula")
+public class PeliculaApi {
     @Autowired
-    ReplyService oReplyService;
+    private PeliculaService peliculaService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReplyEntity> get(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(oReplyService.get(id));
+    public ResponseEntity<PeliculaEntity> get(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(peliculaService.get(id));
     }
 
     @PostMapping("")
-    public ResponseEntity<Long> create(@RequestBody ReplyEntity oReplyEntity) {
-        return ResponseEntity.ok(oReplyService.create(oReplyEntity));
+    public ResponseEntity<Long> create(@RequestBody PeliculaEntity pelicula) {
+        return ResponseEntity.ok(peliculaService.create(pelicula));
     }
 
     @PutMapping("")
-    public ResponseEntity<ReplyEntity> update(@RequestBody ReplyEntity oReplyEntity) {
-        return ResponseEntity.ok(oReplyService.update(oReplyEntity));
+    public ResponseEntity<PeliculaEntity> update(@RequestBody PeliculaEntity pelicula) {
+        return ResponseEntity.ok(peliculaService.update(pelicula));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> delete(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(oReplyService.delete(id));
+        return ResponseEntity.ok(peliculaService.delete(id));
     }
 
     @GetMapping("")
-    public ResponseEntity<Page<ReplyEntity>> getPage(Pageable oPageable) {
-        return ResponseEntity.ok(oReplyService.getPage(oPageable));
+    public ResponseEntity<Page<PeliculaEntity>> getPage(Pageable pageable) {
+        return ResponseEntity.ok(peliculaService.getPage(pageable));
     }
 
     @PostMapping("/populate/{amount}")
     public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
-        return ResponseEntity.ok(oReplyService.populate(amount));
+        return ResponseEntity.ok(peliculaService.populate(amount));
     }
 }
