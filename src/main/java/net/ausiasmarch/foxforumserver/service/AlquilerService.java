@@ -6,23 +6,48 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import net.ausiasmarch.foxforumserver.entity.AlquilerEntity;
+import net.ausiasmarch.foxforumserver.entity.ClienteEntity;
+import net.ausiasmarch.foxforumserver.entity.PeliculaEntity;
 import net.ausiasmarch.foxforumserver.repository.AlquilerRepository;
+import net.ausiasmarch.foxforumserver.repository.PeliculaRepository;
+import net.ausiasmarch.foxforumserver.repository.ClienteRepository;
+
+import java.sql.Date;
+import java.util.Optional;
 
 @Service
 public class AlquilerService {
     @Autowired
-    private AlquilerRepository alquilerRepository;
+    private ClienteRepository clienteRepository;
 
+    @Autowired
+    private PeliculaRepository peliculaRepository;
+
+    @Autowired
+    private AlquilerRepository alquilerRepository;
     public AlquilerEntity get(Long id) {
         return alquilerRepository.findById(id).orElse(null);
     }
-
     public Long create(AlquilerEntity alquiler) {
+        ClienteEntity cliente = alquiler.getCliente();
+        Long clienteId = cliente.getId();
+
+        Optional<ClienteEntity> fetchedCliente = clienteRepository.findById(clienteId);
+        if (fetchedCliente.isEmpty()) {
+            throw new IllegalArgumentException("No se encontró un cliente con el ID proporcionado: " + clienteId);
+        }
+
+       
+        Long peliculaId = alquiler.getPelicula().getId();
+        Optional<PeliculaEntity> fetchedPelicula = peliculaRepository.findById(peliculaId);
+        if (fetchedPelicula.isEmpty()) {
+            throw new IllegalArgumentException("No se encontró una película con el ID proporcionado: " + peliculaId);
+        }
+
         alquilerRepository.save(alquiler);
         return alquiler.getId();
     }
-
-    public AlquilerEntity update(AlquilerEntity alquiler) {
+ public AlquilerEntity update(AlquilerEntity alquiler) {
         alquilerRepository.save(alquiler);
         return alquiler;
     }
@@ -37,7 +62,29 @@ public class AlquilerService {
     }
 
     public Long populate(Integer amount) {
-        // Lógica para poblar la base de datos con datos de ejemplo
-        return 0L;
-    }
+        for (int i = 0; i < amount; i++) {
+            AlquilerEntity alquiler = new AlquilerEntity();
+            
+            // Se asume que ya existen registros de clientes y películas en la base de datos
+            ClienteEntity cliente = clienteRepository.findById(3L).orElse(null); // Obtener el cliente con ID 3
+            PeliculaEntity pelicula = peliculaRepository.findById(2L).orElse(null); // Obtener la película con ID 2
+
+            if (cliente == null) {
+                throw new IllegalArgumentException("No se encontró un cliente con ID 3");
+            }
+
+            if (pelicula == null) {
+                throw new IllegalArgumentException("No se encontró una película con ID 2");
+            }
+
+            alquiler.setCliente(cliente);
+            alquiler.setPelicula(pelicula);
+            alquiler.setFechaAlquiler(new Date(12-2-2020));
+            alquiler.setFechaDevolucion(new Date(12-2-2021));
+
+            alquilerRepository.save(alquiler);
+        }
+        return amount.longValue();
 }
+}
+

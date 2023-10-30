@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
 
@@ -22,8 +23,9 @@ public class AlquilerEntity {
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
+    @NotNull
     private ClienteEntity cliente;
-
+@NotNull
     @ManyToOne
     @JoinColumn(name = "pelicula_id")
     private PeliculaEntity pelicula;
