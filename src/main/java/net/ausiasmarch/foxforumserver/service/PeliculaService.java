@@ -37,7 +37,15 @@ public class PeliculaService {
     }
 
     public Long populate(Integer amount) {
-        // Lógica para poblar la base de datos con datos de ejemplo
-        return 0L;
+        for (int i = 0; i < amount; i++) {
+            PeliculaEntity pelicula = new PeliculaEntity();
+            pelicula.setTitulo("Pelicula" + i);
+            pelicula.setDirector("Director" + i);
+            pelicula.setDuracion(120);  // Duración en minutos
+            pelicula.setGenero("Género" + i);
+
+            peliculaRepository.save(pelicula);
+        }
+        return amount.longValue();
     }
 }

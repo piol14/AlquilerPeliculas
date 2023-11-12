@@ -36,7 +36,14 @@ public class ClienteService {
     }
 
     public Long populate(Integer amount) {
-        // Lógica para poblar la base de datos con datos de ejemplo
-        return 0L;
+        for (int i = 0; i < amount; i++) {
+            ClienteEntity cliente = new ClienteEntity();
+            cliente.setNombre("Cliente" + i);
+            cliente.setDireccion("Dirección" + i);
+            cliente.setTelefono("123456789" + i);
+
+            clienteRepository.save(cliente);
+        }
+        return amount.longValue();
     }
 }

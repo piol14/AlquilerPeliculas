@@ -9,6 +9,15 @@ import org.springframework.web.bind.annotation.*;
 import net.ausiasmarch.foxforumserver.entity.AlquilerEntity;
 import net.ausiasmarch.foxforumserver.service.AlquilerService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import net.ausiasmarch.foxforumserver.entity.AlquilerEntity;
+import net.ausiasmarch.foxforumserver.service.AlquilerService;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/alquiler")
@@ -46,3 +55,4 @@ public class AlquilerApi {
         return ResponseEntity.ok(alquilerService.populate(amount));
     }
 }
+

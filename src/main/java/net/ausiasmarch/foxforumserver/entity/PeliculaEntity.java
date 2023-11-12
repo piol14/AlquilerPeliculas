@@ -2,11 +2,14 @@ package net.ausiasmarch.foxforumserver.entity;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -25,7 +28,10 @@ public class PeliculaEntity {
     private int duracion;
     private String genero;
 
-    @OneToMany(mappedBy = "pelicula")
+   
+
+    // Cambiado a @OneToMany para reflejar que una película puede tener múltiples alquileres
+    @OneToMany(mappedBy = "pelicula", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AlquilerEntity> alquileres;
 
     public PeliculaEntity() {
@@ -70,6 +76,8 @@ public class PeliculaEntity {
     public void setGenero(String genero) {
         this.genero = genero;
     }
+
+ 
 
     public List<AlquilerEntity> getAlquileres() {
         return alquileres;

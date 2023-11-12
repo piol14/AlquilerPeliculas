@@ -15,39 +15,24 @@ import net.ausiasmarch.foxforumserver.repository.ClienteRepository;
 import java.sql.Date;
 import java.util.Optional;
 
+
+
 @Service
 public class AlquilerService {
     @Autowired
-    private ClienteRepository clienteRepository;
-
-    @Autowired
-    private PeliculaRepository peliculaRepository;
-
-    @Autowired
     private AlquilerRepository alquilerRepository;
+private ClienteRepository clienteRepository;
+private PeliculaRepository peliculaRepository;
     public AlquilerEntity get(Long id) {
         return alquilerRepository.findById(id).orElse(null);
     }
-    public Long create(AlquilerEntity alquiler) {
-        ClienteEntity cliente = alquiler.getCliente();
-        Long clienteId = cliente.getId();
 
-        Optional<ClienteEntity> fetchedCliente = clienteRepository.findById(clienteId);
-        if (fetchedCliente.isEmpty()) {
-            throw new IllegalArgumentException("No se encontró un cliente con el ID proporcionado: " + clienteId);
-        }
-
-       
-        Long peliculaId = alquiler.getPelicula().getId();
-        Optional<PeliculaEntity> fetchedPelicula = peliculaRepository.findById(peliculaId);
-        if (fetchedPelicula.isEmpty()) {
-            throw new IllegalArgumentException("No se encontró una película con el ID proporcionado: " + peliculaId);
-        }
-
-        alquilerRepository.save(alquiler);
-        return alquiler.getId();
+    public Long create(AlquilerEntity alquilerEntity) {
+        alquilerEntity.setId(null);
+        return alquilerRepository.save(alquilerEntity).getId();
     }
- public AlquilerEntity update(AlquilerEntity alquiler) {
+
+    public AlquilerEntity update(AlquilerEntity alquiler) {
         alquilerRepository.save(alquiler);
         return alquiler;
     }
@@ -60,6 +45,9 @@ public class AlquilerService {
     public Page<AlquilerEntity> getPage(Pageable pageable) {
         return alquilerRepository.findAll(pageable);
     }
+
+    
+
 
     public Long populate(Integer amount) {
         for (int i = 0; i < amount; i++) {
@@ -78,7 +66,7 @@ public class AlquilerService {
             }
 
             alquiler.setCliente(cliente);
-            alquiler.setPelicula(pelicula);
+            
             alquiler.setFechaAlquiler(new Date(12-2-2020));
             alquiler.setFechaDevolucion(new Date(12-2-2021));
 

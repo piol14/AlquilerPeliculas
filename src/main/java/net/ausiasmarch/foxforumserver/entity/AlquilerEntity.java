@@ -8,10 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "alquiler")
@@ -28,7 +30,9 @@ public class AlquilerEntity {
 @NotNull
     @ManyToOne
     @JoinColumn(name = "pelicula_id")
+  
     private PeliculaEntity pelicula;
+
 
     private Date fechaAlquiler;
     private Date fechaDevolucion;
@@ -51,14 +55,11 @@ public class AlquilerEntity {
     public void setCliente(ClienteEntity cliente) {
         this.cliente = cliente;
     }
-
-    public PeliculaEntity getPelicula() {
+    public PeliculaEntity getPeliculas() {
         return pelicula;
     }
 
-    public void setPelicula(PeliculaEntity pelicula) {
-        this.pelicula = pelicula;
-    }
+    
 
     public Date getFechaAlquiler() {
         return fechaAlquiler;
