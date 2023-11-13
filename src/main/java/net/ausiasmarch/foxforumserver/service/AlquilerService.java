@@ -83,9 +83,9 @@ private PeliculaRepository peliculaRepository;
             }
 
             alquiler.setCliente(cliente);
-            
-            alquiler.setFechaAlquiler("12-2-2020");
-            alquiler.setFechaDevolucion("12-2-2021");
+            alquiler.setPelicula(pelicula);
+            alquiler.setFecha_alquiler("12-2-2020");
+            alquiler.setFecha_devolucion("12-2-2021");
 
             alquilerRepository.save(alquiler);
         }

@@ -15,6 +15,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "alquiler")
 public class AlquilerEntity {
@@ -24,18 +26,24 @@ public class AlquilerEntity {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "cliente_id")
     @NotNull
     private ClienteEntity cliente;
 @NotNull
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "pelicula_id")
   
     private PeliculaEntity pelicula;
 
 
-    private String fechaAlquiler;
-    private String fechaDevolucion;
+    public void setPelicula(PeliculaEntity pelicula) {
+    this.pelicula = pelicula;
+}
+
+    private String fecha_alquiler;
+    private String fecha_devolucion;
 
     public AlquilerEntity() {
     }
@@ -61,19 +69,19 @@ public class AlquilerEntity {
 
     
 
-    public String getFechaAlquiler() {
-        return fechaAlquiler;
+    public String getFecha_alquiler() {
+        return fecha_alquiler;
     }
 
-    public void setFechaAlquiler(String fechaAlquiler) {
-        this.fechaAlquiler = fechaAlquiler;
+    public void setFecha_alquiler(String fechaAlquiler) {
+        this.fecha_alquiler = fechaAlquiler;
     }
 
-    public String getFechaDevolucion() {
-        return fechaDevolucion;
+    public String getFecha_devolucion() {
+        return fecha_devolucion;
     }
 
-    public void setFechaDevolucion(String fechaDevolucion) {
-        this.fechaDevolucion = fechaDevolucion;
+    public void setFecha_devolucion(String fechaDevolucion) {
+        this.fecha_devolucion = fechaDevolucion;
     }
 }
