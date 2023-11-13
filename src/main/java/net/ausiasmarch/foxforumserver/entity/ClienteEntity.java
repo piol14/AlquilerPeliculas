@@ -20,6 +20,14 @@ public class ClienteEntity {
     private String nombre;
     private String direccion;
     private String telefono;
+    private boolean rol;
+    public boolean getRol() {
+        return rol;
+    }
+
+    public void setRol(boolean rol) {
+        this.rol = rol;
+    }
 
     @OneToMany(mappedBy = "cliente")
     private List<AlquilerEntity> alquileres;

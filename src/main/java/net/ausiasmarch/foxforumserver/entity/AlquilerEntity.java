@@ -34,8 +34,8 @@ public class AlquilerEntity {
     private PeliculaEntity pelicula;
 
 
-    private Date fechaAlquiler;
-    private Date fechaDevolucion;
+    private String fechaAlquiler;
+    private String fechaDevolucion;
 
     public AlquilerEntity() {
     }
@@ -55,25 +55,25 @@ public class AlquilerEntity {
     public void setCliente(ClienteEntity cliente) {
         this.cliente = cliente;
     }
-    public PeliculaEntity getPeliculas() {
+    public PeliculaEntity getPelicula() {
         return pelicula;
     }
 
     
 
-    public Date getFechaAlquiler() {
+    public String getFechaAlquiler() {
         return fechaAlquiler;
     }
 
-    public void setFechaAlquiler(Date fechaAlquiler) {
+    public void setFechaAlquiler(String fechaAlquiler) {
         this.fechaAlquiler = fechaAlquiler;
     }
 
-    public Date getFechaDevolucion() {
+    public String getFechaDevolucion() {
         return fechaDevolucion;
     }
 
-    public void setFechaDevolucion(Date fechaDevolucion) {
+    public void setFechaDevolucion(String fechaDevolucion) {
         this.fechaDevolucion = fechaDevolucion;
     }
 }

@@ -21,15 +21,32 @@ import java.util.Optional;
 public class AlquilerService {
     @Autowired
     private AlquilerRepository alquilerRepository;
+     @Autowired
 private ClienteRepository clienteRepository;
+ @Autowired
 private PeliculaRepository peliculaRepository;
     public AlquilerEntity get(Long id) {
         return alquilerRepository.findById(id).orElse(null);
     }
+ public Long create(AlquilerEntity alquiler) {
+        ClienteEntity cliente = alquiler.getCliente();
+        Long clienteId = cliente.getId();
 
-    public Long create(AlquilerEntity alquilerEntity) {
-        alquilerEntity.setId(null);
-        return alquilerRepository.save(alquilerEntity).getId();
+        Optional<ClienteEntity> fetchedCliente = clienteRepository.findById(clienteId);
+        if (fetchedCliente.isEmpty()) {
+            throw new IllegalArgumentException("No se encontró un cliente con el ID proporcionado: " + clienteId);
+        }
+
+
+         PeliculaEntity pelicula= alquiler.getPelicula();
+         Long peliculaId = pelicula.getId();
+        Optional<PeliculaEntity> fetchedPelicula = peliculaRepository.findById(peliculaId);
+        if (fetchedPelicula.isEmpty()) {
+            throw new IllegalArgumentException("No se encontró una película con el ID proporcionado: " + peliculaId);
+        }
+
+        alquilerRepository.save(alquiler);
+        return alquiler.getId();
     }
 
     public AlquilerEntity update(AlquilerEntity alquiler) {
@@ -67,8 +84,8 @@ private PeliculaRepository peliculaRepository;
 
             alquiler.setCliente(cliente);
             
-            alquiler.setFechaAlquiler(new Date(12-2-2020));
-            alquiler.setFechaDevolucion(new Date(12-2-2021));
+            alquiler.setFechaAlquiler("12-2-2020");
+            alquiler.setFechaDevolucion("12-2-2021");
 
             alquilerRepository.save(alquiler);
         }

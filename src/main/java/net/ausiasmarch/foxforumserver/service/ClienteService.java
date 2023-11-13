@@ -41,7 +41,7 @@ public class ClienteService {
             cliente.setNombre("Cliente" + i);
             cliente.setDireccion("Dirección" + i);
             cliente.setTelefono("123456789" + i);
-
+            cliente.setRol(false);
             clienteRepository.save(cliente);
         }
         return amount.longValue();
