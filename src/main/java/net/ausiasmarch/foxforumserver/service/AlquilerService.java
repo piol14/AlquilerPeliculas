@@ -28,24 +28,8 @@ private PeliculaRepository peliculaRepository;
     public AlquilerEntity get(Long id) {
         return alquilerRepository.findById(id).orElse(null);
     }
- public Long create(AlquilerEntity alquiler) {
-        ClienteEntity cliente = alquiler.getCliente();
-        Long clienteId = cliente.getId();
-
-        Optional<ClienteEntity> fetchedCliente = clienteRepository.findById(clienteId);
-        if (fetchedCliente.isEmpty()) {
-            throw new IllegalArgumentException("No se encontró un cliente con el ID proporcionado: " + clienteId);
-        }
-
-
-         PeliculaEntity pelicula= alquiler.getPelicula();
-         Long peliculaId = pelicula.getId();
-        Optional<PeliculaEntity> fetchedPelicula = peliculaRepository.findById(peliculaId);
-        if (fetchedPelicula.isEmpty()) {
-            throw new IllegalArgumentException("No se encontró una película con el ID proporcionado: " + peliculaId);
-        }
-
-        alquilerRepository.save(alquiler);
+    public Long create(AlquilerEntity alquiler) {
+    alquilerRepository.save(alquiler);
         return alquiler.getId();
     }
 

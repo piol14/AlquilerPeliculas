@@ -3,6 +3,7 @@ package net.ausiasmarch.foxforumserver.entity;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,25 +18,27 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name = "alquiler")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class AlquilerEntity {
     @Id
-    
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @ManyToOne
-    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")
     @NotNull
     private ClienteEntity cliente;
-@NotNull
-    @ManyToOne
-    @JsonIgnore
+    
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pelicula_id")
-  
     private PeliculaEntity pelicula;
+    
 
 
     public void setPelicula(PeliculaEntity pelicula) {
