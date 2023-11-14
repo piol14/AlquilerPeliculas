@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -26,10 +25,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name = "alquiler")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class AlquilerEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id")
     @NotNull
@@ -39,7 +41,7 @@ public class AlquilerEntity {
     @JoinColumn(name = "pelicula_id")
     private PeliculaEntity pelicula;
     
-
+    
 
     public void setPelicula(PeliculaEntity pelicula) {
     this.pelicula = pelicula;

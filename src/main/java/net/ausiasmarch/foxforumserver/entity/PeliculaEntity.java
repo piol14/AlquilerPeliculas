@@ -2,6 +2,8 @@ package net.ausiasmarch.foxforumserver.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +34,7 @@ public class PeliculaEntity {
 
     // Cambiado a @OneToMany para reflejar que una película puede tener múltiples alquileres
     @OneToMany(mappedBy = "pelicula", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<AlquilerEntity> alquileres;
 
     public PeliculaEntity() {

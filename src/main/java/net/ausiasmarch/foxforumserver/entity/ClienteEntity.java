@@ -1,5 +1,6 @@
 package net.ausiasmarch.foxforumserver.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,19 +24,13 @@ public class ClienteEntity {
     private String direccion;
     private String telefono;
     private boolean rol;
-    public boolean getRol() {
-        return rol;
-    }
+   
 
-    public void setRol(boolean rol) {
-        this.rol = rol;
-    }
-
-    @OneToMany(mappedBy = "cliente")
-    @JsonIgnore
+    @OneToMany(mappedBy = "cliente", fetch = jakarta.persistence.FetchType.LAZY)
     private List<AlquilerEntity> alquileres;
 
     public ClienteEntity() {
+        alquileres = new ArrayList<>();
     }
 
     public Long getId() {
@@ -70,11 +65,16 @@ public class ClienteEntity {
         this.telefono = telefono;
     }
 
-    public List<AlquilerEntity> getAlquileres() {
-        return alquileres;
+     public boolean getRol() {
+        return rol;
     }
 
-    public void setAlquileres(List<AlquilerEntity> alquileres) {
-        this.alquileres = alquileres;
+    public void setRol(boolean rol) {
+        this.rol = rol;
     }
+    public int getAlquileres() {
+        return alquileres.size();
+    }
+
+   
 }
