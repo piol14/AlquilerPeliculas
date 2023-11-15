@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 
 
 @Entity
@@ -24,7 +25,41 @@ public class ClienteEntity {
     private String direccion;
     private String telefono;
     private boolean rol;
+    private String username;
    
+
+    @Pattern(regexp = "^[a-fA-F0-9]+$", message = "Password must be hexadecimal")
+    private String password = "e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e";  
+
+    
+    public ClienteEntity(String username,
+             String password) {
+        this.username = username;
+        this.password = password;
+    }
+    public ClienteEntity(Long id, String nombre, String direccion, String telefono, boolean rol, String username,
+           String password,
+            List<AlquilerEntity> alquileres) {
+        this.id = id;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.rol = rol;
+        this.username = username;
+        this.password = password;
+        this.alquileres = alquileres;
+    }
+    public ClienteEntity(String nombre, String direccion, String telefono, boolean rol, String username,
+            String password,
+            List<AlquilerEntity> alquileres) {
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.rol = rol;
+        this.username = username;
+        this.password = password;
+        this.alquileres = alquileres;
+    }
 
     @OneToMany(mappedBy = "cliente", fetch = jakarta.persistence.FetchType.LAZY)
     private List<AlquilerEntity> alquileres;
@@ -76,5 +111,19 @@ public class ClienteEntity {
         return alquileres.size();
     }
 
-   
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }
