@@ -12,15 +12,23 @@ import net.ausiasmarch.foxforumserver.repository.PeliculaRepository;
 public class PeliculaService {
     @Autowired
     private PeliculaRepository peliculaRepository;
-
+    @Autowired
+    private SessionService oSessionService;
     public PeliculaEntity get(Long id) {
         return peliculaRepository.findById(id).orElse(null);
     }
 
     public Long create(PeliculaEntity pelicula) {
+        if ( oSessionService != null) {
+            oSessionService.onlyAdmins();
+        } else {
+           
+            throw new NullPointerException("SessionService is null");
+        }
         peliculaRepository.save(pelicula);
         return pelicula.getId();
     }
+
 
     public PeliculaEntity update(PeliculaEntity pelicula) {
         peliculaRepository.save(pelicula);
