@@ -19,7 +19,10 @@ public class ClienteApi {
     public ResponseEntity<ClienteEntity> get(@PathVariable("id") Long id) {
         return ResponseEntity.ok(clienteService.get(id));
     }
-
+  @GetMapping("/byUsername/{username}")
+    public ResponseEntity<ClienteEntity> get(@PathVariable("username") String username) {
+        return ResponseEntity.ok(clienteService.getByUsername(username));
+    }
     @PostMapping("")
     public ResponseEntity<Long> create(@RequestBody ClienteEntity cliente) {
         return ResponseEntity.ok(clienteService.create(cliente));

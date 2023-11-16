@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import net.ausiasmarch.foxforumserver.entity.AlquilerEntity;
 import net.ausiasmarch.foxforumserver.entity.ClienteEntity;
 import net.ausiasmarch.foxforumserver.entity.PeliculaEntity;
+import net.ausiasmarch.foxforumserver.exception.ResourceNotFoundException;
 import net.ausiasmarch.foxforumserver.repository.AlquilerRepository;
 import net.ausiasmarch.foxforumserver.repository.PeliculaRepository;
 import net.ausiasmarch.foxforumserver.repository.ClienteRepository;
@@ -26,49 +27,71 @@ public class AlquilerService {
 private ClienteRepository clienteRepository;
  @Autowired
 private PeliculaRepository peliculaRepository;
+ @Autowired
+private SessionService sessionService;
     public AlquilerEntity get(Long id) {
         return alquilerRepository.findById(id).orElse(null);
     }
     public Long create(AlquilerEntity alquiler) {
-    alquilerRepository.save(alquiler);
-        return alquiler.getId();
+        sessionService.onlyAdminsOrUsers();
+        if (sessionService.isUser()) {
+            alquiler.setCliente(sessionService.getSessionUser());
+    return alquilerRepository.save(alquiler).getId();
+        } else {
+            return alquilerRepository.save(alquiler).getId();
+        }
     }
+    
 
  @Transactional
 public AlquilerEntity update(AlquilerEntity updatedAlquiler) {
-    Long id = updatedAlquiler.getId();
-    AlquilerEntity existingAlquiler = alquilerRepository.findById(id).orElse(null);
+AlquilerEntity oAlquilerEntityFromDatabase = this.get(updatedAlquiler.getId());
+       sessionService.onlyAdminsOrUsersWithIisOwnData(oAlquilerEntityFromDatabase.getCliente().getId());
 
-    if (existingAlquiler == null) {
-        throw new IllegalArgumentException("No se encontró un alquiler con ID " + id);
+    if (oAlquilerEntityFromDatabase == null) {
+        throw new IllegalArgumentException("No se encontró un alquiler con ID " + updatedAlquiler.getId() );
     }
 
     // Verifica que el cliente no sea nulo antes de asignarlo
     if (updatedAlquiler.getCliente() != null) {
-        existingAlquiler.setCliente(updatedAlquiler.getCliente());
+        oAlquilerEntityFromDatabase.setCliente(updatedAlquiler.getCliente());
     } else {
         // Maneja el caso donde el cliente es nulo (puedes lanzar una excepción o tomar otra acción según tus necesidades)
         throw new IllegalArgumentException("El cliente no puede ser nulo");
     }
 
     // Actualiza otros campos
-    existingAlquiler.setPelicula(updatedAlquiler.getPelicula());
-    existingAlquiler.setFecha_alquiler(updatedAlquiler.getFecha_alquiler());
-    existingAlquiler.setFecha_devolucion(updatedAlquiler.getFecha_devolucion());
+     if (sessionService.isUser()) {
+         if (updatedAlquiler.getCliente().getId().equals(sessionService.getSessionUser().getId())) {
+   oAlquilerEntityFromDatabase.setPelicula(updatedAlquiler.getPelicula());
+    oAlquilerEntityFromDatabase.setFecha_alquiler(updatedAlquiler.getFecha_alquiler());
+   oAlquilerEntityFromDatabase.setFecha_devolucion(updatedAlquiler.getFecha_devolucion());
+    alquilerRepository.save(oAlquilerEntityFromDatabase);
+        return oAlquilerEntityFromDatabase;
+     
+    }
+    else {
+                throw new ResourceNotFoundException("Unauthorized");
+            }
+     } 
+
+            else{
+                 return   alquilerRepository.save(oAlquilerEntityFromDatabase);
+            }
+        }
 
     // Guarda los cambios en la base de datos
-    try {
-        alquilerRepository.save(existingAlquiler);
-        return existingAlquiler;
-    } catch (Exception e) {
-        throw new RuntimeException("Error al actualizar el alquiler con ID " + id, e);
-    }
-}
+
+       
+   
+
 
 
 
 
     public Long delete(Long id) {
+      AlquilerEntity oAlquilerEntityFromDatabase = this.get(id);
+        sessionService.onlyAdminsOrUsersWithIisOwnData(oAlquilerEntityFromDatabase.getCliente().getId());
         alquilerRepository.deleteById(id);
         return id;
     }
@@ -81,6 +104,7 @@ public AlquilerEntity update(AlquilerEntity updatedAlquiler) {
 
 
     public Long populate(Integer amount) {
+               sessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
             AlquilerEntity alquiler = new AlquilerEntity();
             

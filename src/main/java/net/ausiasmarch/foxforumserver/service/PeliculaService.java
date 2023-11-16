@@ -19,6 +19,7 @@ public class PeliculaService {
     }
 
     public Long create(PeliculaEntity pelicula) {
+
         if ( oSessionService != null) {
             oSessionService.onlyAdmins();
         } else {
@@ -31,20 +32,24 @@ public class PeliculaService {
 
 
     public PeliculaEntity update(PeliculaEntity pelicula) {
+         oSessionService.onlyAdmins();
         peliculaRepository.save(pelicula);
         return pelicula;
     }
 
     public Long delete(Long id) {
+        oSessionService.onlyAdmins();
         peliculaRepository.deleteById(id);
         return id;
     }
 
     public Page<PeliculaEntity> getPage(Pageable pageable) {
+
         return peliculaRepository.findAll(pageable);
     }
 
     public Long populate(Integer amount) {
+        oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
             PeliculaEntity pelicula = new PeliculaEntity();
             pelicula.setTitulo("Pelicula" + i);

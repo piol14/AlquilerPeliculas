@@ -27,13 +27,16 @@ public class SessionService {
         return JWTHelper.generateJWT(oUserBean.getUsername());
     }
 
-    public String getSessionUsername() {        
-        if (oHttpServletRequest.getAttribute("username") instanceof String) {
-            return oHttpServletRequest.getAttribute("username").toString();
-        } else {
-            return null;
-        }
+ public String getSessionUsername() {        
+    Object usernameAttribute = oHttpServletRequest.getAttribute("username");
+    if (usernameAttribute instanceof String) {
+        return usernameAttribute.toString();
+    } else {
+        // Add a log statement for debugging
+        System.out.println("Attribute 'username' is not a String or is null");
+        return null;
     }
+}
 
     public ClienteEntity getSessionUser() {
         if (this.getSessionUsername() != null) {

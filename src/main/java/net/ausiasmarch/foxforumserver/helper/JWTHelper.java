@@ -30,7 +30,7 @@ public class JWTHelper {
                 .setIssuer(ISSUER)
                 .setIssuedAt(currentTime)
                 .setExpiration(expiryTime)
-                .claim("name", username)
+                .claim("username", username)
                 .signWith(secretKey())
                 .compact();
     }
@@ -51,7 +51,7 @@ public class JWTHelper {
             throw new JWTException("Error validating JWT: wrong issuer");
         }
 
-        return claims.get("name", String.class);
+        return claims.get("username", String.class);
     }
 
 }
