@@ -29,8 +29,10 @@ public class PeliculaEntity {
     private String director;
     private int duracion;
     private String genero;
-
+    private double precio;
    
+
+ 
 
     // Cambiado a @OneToMany para reflejar que una película puede tener múltiples alquileres
     @OneToMany(mappedBy = "pelicula", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -88,5 +90,12 @@ public class PeliculaEntity {
 
     public void setAlquileres(List<AlquilerEntity> alquileres) {
         this.alquileres = alquileres;
+    }
+       public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 }

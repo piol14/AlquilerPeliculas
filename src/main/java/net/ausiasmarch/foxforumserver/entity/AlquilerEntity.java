@@ -12,12 +12,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -47,8 +47,13 @@ public class AlquilerEntity {
     this.pelicula = pelicula;
 }
 
-    private String fecha_alquiler;
-    private String fecha_devolucion;
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+private LocalDate fecha_alquiler;
+
+@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+ private LocalDate fecha_devolucion;
+
+    
 
     public AlquilerEntity() {
     }
@@ -72,21 +77,20 @@ public class AlquilerEntity {
         return pelicula;
     }
 
+public LocalDate getFecha_alquiler() {
+    return fecha_alquiler;
+}
+
+public void setFecha_alquiler(LocalDate fecha_alquiler) {
+    this.fecha_alquiler = fecha_alquiler;
+}
     
+public LocalDate getFecha_devolucion() {
+    return fecha_devolucion;
+}
 
-    public String getFecha_alquiler() {
-        return fecha_alquiler;
-    }
-
-    public void setFecha_alquiler(String fechaAlquiler) {
-        this.fecha_alquiler = fechaAlquiler;
-    }
-
-    public String getFecha_devolucion() {
-        return fecha_devolucion;
-    }
-
-    public void setFecha_devolucion(String fechaDevolucion) {
-        this.fecha_devolucion = fechaDevolucion;
-    }
+public void setFecha_devolucion(LocalDate fecha_devolucion) {
+    this.fecha_devolucion = fecha_devolucion;
+}
+   
 }

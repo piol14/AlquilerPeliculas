@@ -25,7 +25,7 @@ public class ClienteEntity {
     private String direccion;
     private String telefono;
     private boolean rol;
-    private String username;
+    private String username="piol";
    
 
     @Pattern(regexp = "^[a-fA-F0-9]+$", message = "Password must be hexadecimal")

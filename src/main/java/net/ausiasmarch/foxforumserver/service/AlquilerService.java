@@ -15,6 +15,8 @@ import net.ausiasmarch.foxforumserver.repository.PeliculaRepository;
 import net.ausiasmarch.foxforumserver.repository.ClienteRepository;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 
@@ -34,12 +36,13 @@ private SessionService sessionService;
     }
     public Long create(AlquilerEntity alquiler) {
         sessionService.onlyAdminsOrUsers();
+    
+      
+        
         if (sessionService.isUser()) {
             alquiler.setCliente(sessionService.getSessionUser());
-    return alquilerRepository.save(alquiler).getId();
-        } else {
-            return alquilerRepository.save(alquiler).getId();
         }
+        return alquilerRepository.save(alquiler).getId();
     }
     
 
@@ -104,10 +107,12 @@ AlquilerEntity oAlquilerEntityFromDatabase = this.get(updatedAlquiler.getId());
 
 
     public Long populate(Integer amount) {
-               sessionService.onlyAdmins();
+        sessionService.onlyAdmins();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
         for (int i = 0; i < amount; i++) {
             AlquilerEntity alquiler = new AlquilerEntity();
-            
+
             // Se asume que ya existen registros de clientes y películas en la base de datos
             ClienteEntity cliente = clienteRepository.findById(3L).orElse(null); // Obtener el cliente con ID 3
             PeliculaEntity pelicula = peliculaRepository.findById(2L).orElse(null); // Obtener la película con ID 2
@@ -122,12 +127,13 @@ AlquilerEntity oAlquilerEntityFromDatabase = this.get(updatedAlquiler.getId());
 
             alquiler.setCliente(cliente);
             alquiler.setPelicula(pelicula);
-            alquiler.setFecha_alquiler("12-2-2020");
-            alquiler.setFecha_devolucion("12-2-2021");
+            alquiler.setFecha_alquiler(LocalDate.parse("12-03-2023", formatter));
+            alquiler.setFecha_devolucion(LocalDate.parse("12-02-2021", formatter));
 
             alquilerRepository.save(alquiler);
         }
         return amount.longValue();
+    }
 }
-}
+
 
