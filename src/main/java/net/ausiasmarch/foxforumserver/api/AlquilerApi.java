@@ -57,5 +57,9 @@ public class AlquilerApi {
     public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(alquilerService.populate(amount));
     }
+     @DeleteMapping("/empty")
+    public ResponseEntity<Long> empty() {
+        return ResponseEntity.ok(alquilerService.empty());
+    }
 }
 

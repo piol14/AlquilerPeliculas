@@ -55,4 +55,8 @@ public class PeliculaApi {
     public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(peliculaService.populate(amount));
     }
+     @DeleteMapping("/empty")
+    public ResponseEntity<Long> empty() {
+        return ResponseEntity.ok(peliculaService.empty());
+    }
 }

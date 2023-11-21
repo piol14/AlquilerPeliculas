@@ -48,14 +48,17 @@ private SessionService sessionService;
                     case SEMANA:
                         alquiler.setPrecio(alquiler.getPrecio() * 1.2);
                         alquiler.setFecha_devolucion(alquiler.getFecha_alquiler().plusWeeks(1));
+                        alquiler.setDuracion(DuracionAlquiler.SEMANA);
                         break;
                     case MES:
                         alquiler.setPrecio(alquiler.getPrecio() * 1.5);
                         alquiler.setFecha_devolucion(alquiler.getFecha_alquiler().plusMonths(1));
+                        alquiler.setDuracion(DuracionAlquiler.MES);
                         break;
                     case ANIO:
                         alquiler.setPrecio(alquiler.getPrecio() * 2.0);
                         alquiler.setFecha_devolucion(alquiler.getFecha_alquiler().plusYears(1));
+                          alquiler.setDuracion(DuracionAlquiler.ANIO);
                         break;
                     default:
                         throw new IllegalArgumentException("Duración de alquiler no válida");
@@ -156,13 +159,21 @@ AlquilerEntity oAlquilerEntityFromDatabase = this.get(updatedAlquiler.getId());
 
             alquiler.setCliente(cliente);
             alquiler.setPelicula(pelicula);
-            alquiler.setFecha_alquiler(LocalDate.parse("12-03-2023", formatter));
-            alquiler.setFecha_devolucion(LocalDate.parse("12-02-2021", formatter));
+             alquiler.setFecha_alquiler(LocalDate.now());
+             alquiler.setFecha_devolucion(alquiler.getFecha_alquiler().plusWeeks(1));
+            alquiler.setDuracion(DuracionAlquiler.SEMANA);
            alquiler.setPrecio(1.99  );
             alquilerRepository.save(alquiler);
         }
         return amount.longValue();
     
 }
-
+ @Transactional
+    public Long empty() {
+        sessionService.onlyAdmins();
+        alquilerRepository.deleteAll();
+        alquilerRepository.resetAutoIncrement();
+       alquilerRepository.flush();
+        return alquilerRepository.count();
+    }
 }

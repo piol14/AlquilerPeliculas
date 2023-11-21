@@ -47,4 +47,8 @@ public class ClienteApi {
     public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(clienteService.populate(amount));
     }
+     @DeleteMapping("/empty")
+    public ResponseEntity<Long> empty() {
+        return ResponseEntity.ok(clienteService.empty());
+    }
 }

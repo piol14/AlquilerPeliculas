@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import net.ausiasmarch.foxforumserver.entity.PeliculaEntity;
 import net.ausiasmarch.foxforumserver.repository.PeliculaRepository;
 
@@ -60,5 +61,13 @@ public class PeliculaService {
             peliculaRepository.save(pelicula);
         }
         return amount.longValue();
+    }
+    @Transactional
+    public Long empty() {
+        oSessionService.onlyAdmins();
+        peliculaRepository.deleteAll();
+        peliculaRepository.resetAutoIncrement();
+       peliculaRepository.flush();
+        return peliculaRepository.count();
     }
 }

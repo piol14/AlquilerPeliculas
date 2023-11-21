@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Pattern;
 import net.ausiasmarch.foxforumserver.entity.ClienteEntity;
 import net.ausiasmarch.foxforumserver.exception.ResourceNotFoundException;
@@ -75,5 +76,13 @@ oSessionService.onlyAdmins();
             clienteRepository.save(cliente);
         }
         return amount.longValue();
+    }
+    @Transactional
+    public Long empty() {
+        oSessionService.onlyAdmins();
+        clienteRepository.deleteAll();
+        clienteRepository.resetAutoIncrement();
+        clienteRepository.flush();
+        return clienteRepository.count();
     }
 }
