@@ -1,8 +1,12 @@
 package net.ausiasmarch.foxforumserver.entity;
+import net.ausiasmarch.foxforumserver.entity.DuracionAlquiler;
 
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,7 +19,6 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -40,12 +43,23 @@ public class AlquilerEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pelicula_id")
     private PeliculaEntity pelicula;
+    private double precio;
     
-    
+@Column(name = "duracion")
+    @Enumerated(EnumType.STRING)
+    private DuracionAlquiler duracion;
 
-    public void setPelicula(PeliculaEntity pelicula) {
-    this.pelicula = pelicula;
-}
+    // ...
+
+    public DuracionAlquiler getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(DuracionAlquiler duracion) {
+        this.duracion = duracion;
+    }
+ 
+
 
 @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 private LocalDate fecha_alquiler;
@@ -92,5 +106,14 @@ public LocalDate getFecha_devolucion() {
 public void setFecha_devolucion(LocalDate fecha_devolucion) {
     this.fecha_devolucion = fecha_devolucion;
 }
-   
+      public void setPelicula(PeliculaEntity pelicula) {
+    this.pelicula = pelicula;
+}
+public double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
 }

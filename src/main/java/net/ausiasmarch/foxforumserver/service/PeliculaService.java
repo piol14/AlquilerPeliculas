@@ -56,7 +56,7 @@ public class PeliculaService {
             pelicula.setDirector("Director" + i);
             pelicula.setDuracion(120);  // Duración en minutos
             pelicula.setGenero("Género" + i);
-            pelicula.setPrecio(1.99  );
+          
             peliculaRepository.save(pelicula);
         }
         return amount.longValue();

@@ -29,7 +29,7 @@ public class PeliculaEntity {
     private String director;
     private int duracion;
     private String genero;
-    private double precio;
+   
    
 
  
@@ -91,11 +91,5 @@ public class PeliculaEntity {
     public void setAlquileres(List<AlquilerEntity> alquileres) {
         this.alquileres = alquileres;
     }
-       public double getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
+      
 }

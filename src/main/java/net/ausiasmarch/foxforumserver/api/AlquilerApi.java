@@ -1,5 +1,7 @@
 package net.ausiasmarch.foxforumserver.api;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +34,7 @@ public class AlquilerApi {
 
     @PostMapping("")
     public ResponseEntity<Long> create(@RequestBody AlquilerEntity alquiler) {
+       
         return ResponseEntity.ok(alquilerService.create(alquiler));
     }
 

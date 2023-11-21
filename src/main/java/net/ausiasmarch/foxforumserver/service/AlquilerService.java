@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import net.ausiasmarch.foxforumserver.entity.AlquilerEntity;
 import net.ausiasmarch.foxforumserver.entity.ClienteEntity;
+import net.ausiasmarch.foxforumserver.entity.DuracionAlquiler;
 import net.ausiasmarch.foxforumserver.entity.PeliculaEntity;
 import net.ausiasmarch.foxforumserver.exception.ResourceNotFoundException;
 import net.ausiasmarch.foxforumserver.repository.AlquilerRepository;
 import net.ausiasmarch.foxforumserver.repository.PeliculaRepository;
 import net.ausiasmarch.foxforumserver.repository.ClienteRepository;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -37,13 +40,39 @@ private SessionService sessionService;
     public Long create(AlquilerEntity alquiler) {
         sessionService.onlyAdminsOrUsers();
     
-      
-        
+        if (alquiler.getPrecio() != 0.0) {
+            // Calcula el precio final según la duración si es necesario
+            if (alquiler.getDuracion() != null) {
+                alquiler.setFecha_alquiler(LocalDate.now());
+                switch (alquiler.getDuracion()) {
+                    case SEMANA:
+                        alquiler.setPrecio(alquiler.getPrecio() * 1.2);
+                        alquiler.setFecha_devolucion(alquiler.getFecha_alquiler().plusWeeks(1));
+                        break;
+                    case MES:
+                        alquiler.setPrecio(alquiler.getPrecio() * 1.5);
+                        alquiler.setFecha_devolucion(alquiler.getFecha_alquiler().plusMonths(1));
+                        break;
+                    case ANIO:
+                        alquiler.setPrecio(alquiler.getPrecio() * 2.0);
+                        alquiler.setFecha_devolucion(alquiler.getFecha_alquiler().plusYears(1));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Duración de alquiler no válida");
+                }
+            } else {
+                // Si la duración es nula, establece la fecha de devolución igual a la fecha de alquiler
+                alquiler.setFecha_devolucion(alquiler.getFecha_alquiler());
+            }
+        }
+    
         if (sessionService.isUser()) {
             alquiler.setCliente(sessionService.getSessionUser());
         }
+    
         return alquilerRepository.save(alquiler).getId();
     }
+    
     
 
  @Transactional
@@ -129,11 +158,11 @@ AlquilerEntity oAlquilerEntityFromDatabase = this.get(updatedAlquiler.getId());
             alquiler.setPelicula(pelicula);
             alquiler.setFecha_alquiler(LocalDate.parse("12-03-2023", formatter));
             alquiler.setFecha_devolucion(LocalDate.parse("12-02-2021", formatter));
-
+           alquiler.setPrecio(1.99  );
             alquilerRepository.save(alquiler);
         }
         return amount.longValue();
-    }
+    
 }
 
-
+}
