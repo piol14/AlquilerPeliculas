@@ -43,15 +43,16 @@ oSessionService.onlyAdmins();
          ClienteEntity oUserEntityFromDatabase = this.get(cliente.getId());
         oSessionService.onlyAdminsOrUsersWithIisOwnData(oUserEntityFromDatabase.getId());
         if (oSessionService.isUser()) {
-            cliente.setId(null);
+            
             cliente.setRol(oUserEntityFromDatabase.getRol());
             cliente.setPassword(flowflewPASSWORD );
             return clienteRepository.save(cliente);
         } else {
-            cliente.setId(null);
+            
             cliente.setPassword(flowflewPASSWORD );
             return clienteRepository.save(cliente);
         }
+       
     }
     public Long delete(Long id) {
         oSessionService.onlyAdmins();
