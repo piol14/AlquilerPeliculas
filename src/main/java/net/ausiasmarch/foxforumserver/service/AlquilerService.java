@@ -78,13 +78,16 @@ private SessionService sessionService;
     
     
 
- @Transactional
+
+
+
+@Transactional
 public AlquilerEntity update(AlquilerEntity updatedAlquiler) {
-AlquilerEntity oAlquilerEntityFromDatabase = this.get(updatedAlquiler.getId());
-       sessionService.onlyAdminsOrUsersWithIisOwnData(oAlquilerEntityFromDatabase.getCliente().getId());
+    AlquilerEntity oAlquilerEntityFromDatabase = this.get(updatedAlquiler.getId());
+    sessionService.onlyAdminsOrUsersWithIisOwnData(oAlquilerEntityFromDatabase.getCliente().getId());
 
     if (oAlquilerEntityFromDatabase == null) {
-        throw new IllegalArgumentException("No se encontró un alquiler con ID " + updatedAlquiler.getId() );
+        throw new IllegalArgumentException("No se encontró un alquiler con ID " + updatedAlquiler.getId());
     }
 
     // Verifica que el cliente no sea nulo antes de asignarlo
@@ -96,29 +99,40 @@ AlquilerEntity oAlquilerEntityFromDatabase = this.get(updatedAlquiler.getId());
     }
 
     // Actualiza otros campos
-     if (sessionService.isUser()) {
-         if (updatedAlquiler.getCliente().getId().equals(sessionService.getSessionUser().getId())) {
-   oAlquilerEntityFromDatabase.setPelicula(updatedAlquiler.getPelicula());
-    oAlquilerEntityFromDatabase.setFecha_alquiler(updatedAlquiler.getFecha_alquiler());
-   oAlquilerEntityFromDatabase.setFecha_devolucion(updatedAlquiler.getFecha_devolucion());
-    alquilerRepository.save(oAlquilerEntityFromDatabase);
-        return oAlquilerEntityFromDatabase;
-     
-    }
-    else {
-                throw new ResourceNotFoundException("Unauthorized");
+      
+            oAlquilerEntityFromDatabase.setPelicula(updatedAlquiler.getPelicula());
+            oAlquilerEntityFromDatabase.setFecha_alquiler(LocalDate.now());
+
+            // Actualiza siempre el precio basado en la nueva duración
+            switch (updatedAlquiler.getDuracion()) {
+
+                case SEMANA:
+                    oAlquilerEntityFromDatabase.setPrecio(updatedAlquiler.getPrecio() * 1.2);
+                    oAlquilerEntityFromDatabase.setFecha_devolucion((oAlquilerEntityFromDatabase.getFecha_alquiler().plusWeeks(1)));
+                    oAlquilerEntityFromDatabase.setDuracion(DuracionAlquiler.SEMANA);
+                    break;
+                case MES:
+                oAlquilerEntityFromDatabase.setDuracion(DuracionAlquiler.MES);
+                    oAlquilerEntityFromDatabase.setPrecio(updatedAlquiler.getPrecio() * 1.5);
+                    oAlquilerEntityFromDatabase.setFecha_devolucion(oAlquilerEntityFromDatabase.getFecha_alquiler().plusMonths(1));
+                    
+                    break;
+                case ANIO:
+                    oAlquilerEntityFromDatabase.setPrecio(updatedAlquiler.getPrecio() * 2.0);
+                    oAlquilerEntityFromDatabase.setFecha_devolucion((oAlquilerEntityFromDatabase.getFecha_alquiler().plusYears(1)));
+                    oAlquilerEntityFromDatabase.setDuracion(DuracionAlquiler.ANIO);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Duración de alquiler no válida");
             }
-     } 
 
-            else{
-                 return   alquilerRepository.save(oAlquilerEntityFromDatabase);
-            }
-        }
-
-    // Guarda los cambios en la base de datos
-
-       
+            // Guarda los cambios en la base de datos
+            alquilerRepository.save(oAlquilerEntityFromDatabase);
+            return oAlquilerEntityFromDatabase;
+        
    
+}
+
 
 
 
