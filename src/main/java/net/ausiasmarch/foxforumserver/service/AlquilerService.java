@@ -161,7 +161,7 @@ public AlquilerEntity update(AlquilerEntity updatedAlquiler) {
 
             // Se asume que ya existen registros de clientes y películas en la base de datos
             ClienteEntity cliente = clienteRepository.findById(3L).orElse(null); // Obtener el cliente con ID 3
-            PeliculaEntity pelicula = peliculaRepository.findById(2L).orElse(null); // Obtener la película con ID 2
+            PeliculaEntity pelicula = peliculaRepository.findById(3L).orElse(null); // Obtener la película con ID 2
 
             if (cliente == null) {
                 throw new IllegalArgumentException("No se encontró un cliente con ID 3");
